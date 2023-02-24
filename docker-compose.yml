@@ -1,0 +1,30 @@
+version: '2'
+
+services:
+
+  postgres:
+    container_name: image-browser-postgres-db
+    restart: always
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env-docker
+
+  web:
+    container_name: image-browser-web
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    restart: always
+    ports:
+    - "8000:8000"
+    env_file:
+      - .env-docker
+    volumes:
+    - .:/src
+
+volumes:
+  postgres_data:
