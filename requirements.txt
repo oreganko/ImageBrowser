@@ -1,2 +1,4 @@
 Django==4.1.7
 psycopg2==2.9.5
+Pillow==9.4.0
+django-thumbnails==0.7.0
