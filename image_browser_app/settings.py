@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'thumbnails',
+    'easy_thumbnails',
     'image_browser.apps.ImageBrowserConfig',
 ]
 
@@ -131,33 +131,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-# thumbnails
-
-THUMBNAILS = {
-    'METADATA': {
-        'BACKEND': 'thumbnails.backends.metadata.DatabaseBackend',
-    },
-    'STORAGE': {
-        'BACKEND': 'django.core.files.storage.FileSystemStorage',
-    },
-    'SIZES': {
-        'small': {
-            'PROCESSORS': [
-                {'PATH': 'thumbnails.processors.resize', 'height': 200}
-            ],
-            'POST_PROCESSORS': [
-                {
-                    'PATH': 'thumbnails.post_processors.optimize',
-                    'png_command': 'optipng -force -o7 "%(filename)s"',
-                    'jpg_command': 'jpegoptim -f --strip-all "%(filename)s"',
-                },
-            ],
-        },
-        'large': {
-            'PROCESSORS': [
-                {'PATH': 'thumbnails.processors.resize', 'height': 400}
-            ],
-        }
+THUMBNAIL_ALIASES = {
+    '': {
+        'small': {'size': (200, 0), 'crop': False},
+        'large': {'size': (400, 0), 'crop': False}
     }
 }
