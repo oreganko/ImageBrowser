@@ -5,17 +5,16 @@ from django.contrib.auth.models import User
 from django.db import models
 from easy_thumbnails.fields import ThumbnailerImageField
 
-
-# setting file path to MEDIA_ROOT/user_<user_id>/<filename> for links readability
 from easy_thumbnails.files import get_thumbnailer
 
 
+# setting file path to MEDIA_ROOT/user_<user_id>/<filename> for links readability
 def user_directory_path(instance, filename):
     return f'user_{instance.owner.username}/{filename}'
 
 
 class ImageInstance(models.Model):
-    image_file = ThumbnailerImageField()
+    image_file = ThumbnailerImageField(upload_to=user_directory_path)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def get_thumbnail_url(self, width, height):

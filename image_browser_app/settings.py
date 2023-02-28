@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'easy_thumbnails',
+    'rest_framework',
     'image_browser.apps.ImageBrowserConfig',
 ]
 
