@@ -138,3 +138,5 @@ THUMBNAIL_ALIASES = {
         'large': {'size': (400, 0), 'crop': False}
     }
 }
+
+AUTH_USER_MODEL = "image_browser.User"

@@ -16,12 +16,13 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from image_browser import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('api-auth/', include('rest_framework.urls')),
     path('<int:pk>/', views.ImageInstanceDetail.as_view(), name='detail'),
     path('<int:pk>/small', views.ImageInstanceSmallThumbnail.as_view(), name='small_detail'),
     path('<int:pk>/large', views.ImageInstanceLargeThumbnail.as_view(), name='large_detail')

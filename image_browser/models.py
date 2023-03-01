@@ -1,7 +1,5 @@
-from django.db import models
-
 # Create your models here.
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 from easy_thumbnails.fields import ThumbnailerImageField
 
@@ -11,6 +9,16 @@ from easy_thumbnails.files import get_thumbnailer
 # setting file path to MEDIA_ROOT/user_<user_id>/<filename> for links readability
 def user_directory_path(instance, filename):
     return f'user_{instance.owner.username}/{filename}'
+
+
+class User(AbstractUser):
+
+    class Meta:
+        permissions = (
+            ('can_see_small_thumbnail', 'Can get URL with small thumbnail'),
+            ('can_see_large_thumbnail', 'Can get URL with large thumbnail'),
+            ('can_see_original_image', 'Can get URL with original image'),
+        )
 
 
 class ImageInstance(models.Model):
