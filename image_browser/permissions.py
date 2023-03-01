@@ -1,5 +1,7 @@
 from rest_framework import permissions
 
+from image_browser.models import ImageInstance
+
 
 class IsOwnerOrAdmin(permissions.BasePermission):
     """
@@ -10,21 +12,17 @@ class IsOwnerOrAdmin(permissions.BasePermission):
         return obj.owner == request.user or request.user.is_superuser
 
 
-class CanSeeSmallThumbnail(permissions.BasePermission):
+class IsOwnerByUrlImageId(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.user.has_perm('image_browser.can_see_small_thumbnail')
-
-
-class CanSeeLargeThumbnail(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return request.user.has_perm('image_browser.can_see_large_thumbnail')
-
-
-class CanSeeOriginalImage(permissions.BasePermission):
-    def has_permission(self, request, view):
-        return request.user.has_perm('image_browser.can_see_original_image')
+        image = ImageInstance.objects.get(id=view.kwargs.get('pk', None))
+        return request.user == image.owner or request.user.is_superuser
 
 
 class CanUpload(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.user.has_perm('can_upload')
+        return request.user.has_perm('image_browser.can_upload')
+
+
+class CanCreateExpiringLink(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.has_perm('image_browser.can_create_expiring_link')
