@@ -1,5 +1,6 @@
 # Create your models here.
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
 from easy_thumbnails.fields import ThumbnailerImageField
 
@@ -22,12 +23,22 @@ class User(AbstractUser):
         )
 
 
+def validate_file_extension(obj):
+    value = obj.name
+    whitelist = ['.jpg', '.jpeg', '.png']
+    if not any(value.endswith(extension) for extension in whitelist):
+        raise ValidationError('image extension has to be one of .jpg and .png')
+
+
 class ImageInstance(models.Model):
     image_file = ThumbnailerImageField(upload_to=user_directory_path,
-                                       null=False)
+                                       null=False,
+                                       # image has to be .jpg or .png
+                                       validators=[validate_file_extension])
     name = models.CharField(max_length=50, default='No name')
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def get_thumbnail_url(self, width, height):
         options = {'size': (width, height), 'crop': True}
         return get_thumbnailer(self.image_file).get_thumbnail(options).url
+

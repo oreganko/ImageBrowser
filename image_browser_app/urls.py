@@ -24,9 +24,9 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('add/', views.ImageInstanceCreation.as_view(), name='add'),
-    path('<int:pk>/', views.ImageInstanceDetail.as_view(), name='detail'),
-    path('<int:pk>/small', views.ImageInstanceSmallThumbnail.as_view(), name='small_detail'),
-    path('<int:pk>/large', views.ImageInstanceLargeThumbnail.as_view(), name='large_detail')
+    # path('<int:pk>/', views.ImageInstanceDetail.as_view(), name='detail'),
+    # path('<int:pk>/small', views.ImageInstanceSmallThumbnail.as_view(), name='small_detail'),
+    # path('<int:pk>/large', views.ImageInstanceLargeThumbnail.as_view(), name='large_detail')
 ]
 
 if settings.DEBUG:
