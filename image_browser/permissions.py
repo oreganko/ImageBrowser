@@ -23,3 +23,8 @@ class CanSeeLargeThumbnail(permissions.BasePermission):
 class CanSeeOriginalImage(permissions.BasePermission):
     def has_permission(self, request, view):
         return request.user.has_perm('image_browser.can_see_original_image')
+
+
+class CanUpload(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return request.user.has_perm('can_upload')

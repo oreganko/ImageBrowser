@@ -18,11 +18,14 @@ class User(AbstractUser):
             ('can_see_small_thumbnail', 'Can get URL with small thumbnail'),
             ('can_see_large_thumbnail', 'Can get URL with large thumbnail'),
             ('can_see_original_image', 'Can get URL with original image'),
+            ('can_upload', 'Can upload an image'),
         )
 
 
 class ImageInstance(models.Model):
-    image_file = ThumbnailerImageField(upload_to=user_directory_path)
+    image_file = ThumbnailerImageField(upload_to=user_directory_path,
+                                       null=False)
+    name = models.CharField(max_length=50, default='No name')
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def get_thumbnail_url(self, width, height):
