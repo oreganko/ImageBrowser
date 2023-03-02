@@ -28,7 +28,7 @@ class ArbitraryPlanSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = ImageInstance
-        fields = tuple()
+        fields = ('name',)
 
     def to_representation(self, instance: ImageInstance):
         """ Overriding method to create representation based on user plan.

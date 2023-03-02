@@ -1,7 +1,6 @@
 # Create your models here.
 import hashlib
 from datetime import datetime
-from enum import Enum
 
 from PIL import Image
 from django.contrib.auth.models import AbstractUser
@@ -15,14 +14,6 @@ from rest_framework.exceptions import ValidationError
 # setting file path to MEDIA_ROOT/user_<user_id>/<filename> for links readability
 def user_directory_path(instance, filename):
     return f'user_{instance.owner.username}/{filename}'
-
-
-class BuiltInPlans(Enum):
-    """ Enum with preexisting builtin plan tiers"""
-
-    BASIC = 'Basic',
-    PREMIUM = 'Premium',
-    ENTERPRISE = 'Enterprise'
 
 
 class ThumbnailSize(models.Model):
@@ -41,6 +32,9 @@ class PlanTier(models.Model):
     thumbnail_sizes = models.ManyToManyField(ThumbnailSize)
     show_original_link = models.BooleanField(null=False)
     create_expiring_link = models.BooleanField(null=False)
+
+    def __str__(self):
+        return self.name
 
 
 class User(AbstractUser):
