@@ -132,11 +132,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-THUMBNAIL_ALIASES = {
-    '': {
-        'small': {'size': (200, 0), 'crop': False},
-        'large': {'size': (400, 0), 'crop': False}
-    }
-}
-
 AUTH_USER_MODEL = "image_browser.User"
