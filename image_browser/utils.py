@@ -12,6 +12,8 @@ def cut_image_name(name: str) -> str:
 
 def get_plan_by_user(user: User) -> PlanTier:
     """ Gets user plan for authenticated user """
+    if user.is_staff:
+        return PlanTier.objects.get(name='Enterprise')
     return AppUser.objects.get(user=user).plan
 
 

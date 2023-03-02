@@ -21,13 +21,14 @@ from django.urls import path, include, re_path
 from image_browser import views
 
 urlpatterns = [
+    path('', views.ApiRoot.as_view(), name=views.ApiRoot.name),
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
-    path('add/', views.ImageInstanceCreation.as_view(), name='add'),
+    path('images/upload', views.ImageInstanceCreation.as_view(), name=views.ImageInstanceCreation.name),
     path('<int:pk>/', views.ImageInstanceDetail.as_view(), name='detail'),
-    path('images/', views.ImageInstanceList.as_view(), name='list'),
+    path('images/', views.ImageInstanceList.as_view(), name=views.ImageInstanceList.name),
     path('make_temp/<int:pk>/', views.TempLinkCreation.as_view(), name='create_temp_link'),
-    re_path(r'^temp/(?P<hash>\w+)/?$', views.temp_link, name='temp_link')
+    re_path(r'^temp/(?P<hash>\w+)/?$', views.temp_link, name='temp_link'),
 
 ]
 

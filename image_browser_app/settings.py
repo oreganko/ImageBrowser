@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-%l&=_lbctkck_wbdv7bf@#8&e&amqmy+3sc%c6qvz$r1%&p-d7'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -137,3 +137,5 @@ AUTH_USER_MODEL = "image_browser.User"
 ADMINS = (
     ('admin', 'admin@admin.com', 'admin'),
 )
+
+THUMBNAIL_NAMER = 'easy_thumbnails.namers.hashed'

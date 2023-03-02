@@ -6,6 +6,7 @@ from rest_framework import generics, permissions, status
 from rest_framework.generics import get_object_or_404
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.reverse import reverse
 
 from image_browser.models import ImageInstance, TempUrl
 from image_browser.permissions import IsOwnerOrAdmin, CanCreateExpiringLink, IsOwnerByUrlImageId
@@ -14,23 +15,34 @@ from image_browser.serializers import PostImageInstanceSerializer, TempLinkSeria
 from image_browser.utils import cut_image_name
 
 
+class ApiRoot(generics.GenericAPIView):
+    name = 'api-root'
+
+    def get(self, request, *args, **kwargs):
+        return Response({
+            'image-list': reverse(ImageInstanceList.name, request=request),
+            'upload-image': reverse(ImageInstanceCreation.name, request=request)
+        })
+
+
 class ImageInstanceCreation(generics.CreateAPIView):
     """ Create ImageInstance - here one can upload their image"""
     permission_classes = [permissions.IsAuthenticated]
     queryset = ImageInstance.objects.all()
     serializer_class = PostImageInstanceSerializer
+    name = 'upload-image'
 
     def post(self, request, *args, **kwargs):
         # for creation PostImageInstanceSerializer is needed
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        self.perform_create(serializer)
+        created = self.perform_create(serializer)
         headers = self.get_success_headers(serializer.validated_data)
         new_context = {'request': request}
 
         # after upload user has to see links dependent on plan
         view_serializer = ArbitraryPlanSerializer
-        new_data = view_serializer(serializer.save(), context=new_context).data
+        new_data = view_serializer(created, context=new_context).data
         return Response(new_data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
@@ -58,6 +70,7 @@ class ImageInstanceList(generics.ListAPIView):
     """ View of ImageInstance list - visible fields are dependent on the user plan"""
 
     serializer_class = ArbitraryPlanSerializer
+    name = 'image-list'
 
     def get_queryset(self):
         return ImageInstance.objects.filter(owner=self.request.user)
@@ -76,13 +89,13 @@ class TempLinkCreation(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.context['image_pk'] = kwargs['pk']
-        self.perform_create(serializer)
+        created = self.perform_create(serializer)
         headers = self.get_success_headers(serializer.validated_data)
 
         # then serializer to show created link is needed
         view_serializer = ShowTempLinkSerializer
         new_context = {'request': request}
-        new_data = view_serializer(serializer.save(), context=new_context).data
+        new_data = view_serializer(created, context=new_context).data
         return Response(new_data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):

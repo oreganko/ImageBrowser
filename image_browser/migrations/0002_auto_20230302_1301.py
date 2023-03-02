@@ -34,7 +34,6 @@ class Migration(migrations.Migration):
         premium_plan_obj.thumbnail_sizes.set([size_200, size_400])
         enterprise_plan_obj.save()
         enterprise_plan_obj.thumbnail_sizes.set([size_200, size_400])
-        print(enterprise_plan_obj)
 
     operations = [
         migrations.RunPython(insert_default_plans),
